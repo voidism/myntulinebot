@@ -4,6 +4,10 @@ import random
 import configparser
 from bs4 import BeautifulSoup
 from flask import Flask, request, abort
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand
+
+
 from imgurpython import ImgurClient
 
 from linebot import (
@@ -15,6 +19,9 @@ from linebot.exceptions import (
 from linebot.models import *
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://jkvvtzdintehrx:bdfa464550e678373b42fabbb15551d9d2303a5f77bb622da6ceb007e7e05562@ec2-174-129-27-158.compute-1.amazonaws.com:5432/d21urldpnfbqa8"
+db = SQLAlchemy(app)
 
 Channel_Access_Token = "/MMlWzGBxIc4blHk4PPF7nrRdnalu04uN5KOb8cQdSzcumiia7faEM7F8yqj9z1G1xMnQpa03SSx4sZXXcz8x5Oy5yQ/ETLg5ur5ibVM+yqIwaVLTzxj5jiW33zybqMwz99ADpDRbTSNsUwjqA92JgdB04t89/1O/w1cDnyilFU="
 Channel_Secret = "cd343b1e6cb8bc55360c92b172cdb6aa"
@@ -45,6 +52,15 @@ def callback():
 
     return 'ok'
 
+def add_user(name, description):
+    if name != "" and description != "":
+        new_user = UserData(
+            Name=name,
+            Description=description,
+            CreateDate=datetime.now()
+        )
+        db.session.add(new_user)
+        db.session.commit()
 
 def pattern_mega(text):
     patterns = [
@@ -305,6 +321,16 @@ def handle_message(event):
     pass
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
+
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
+    if event.message.text.lower() == "register":
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="You are in!"))
+        
+        description="Yooo!"
+        add_user(event.reply_token, description)
+
     # if event.message.text.lower() == "eyny":
     #     content = eyny_movie()
     #     line_bot_api.reply_message(
@@ -602,8 +628,7 @@ def handle_message(event):
     #         ]
     #     )
     # )
-
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
+    
 
 
 
