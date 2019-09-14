@@ -301,6 +301,7 @@ def oil_price():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    pass
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
     # if event.message.text.lower() == "eyny":
