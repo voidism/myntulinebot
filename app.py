@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 from flask import Flask, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
-
+from datetime import datetime
+from Schema import *
 
 from imgurpython import ImgurClient
 
@@ -322,7 +323,6 @@ def handle_message(event):
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
 
-    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
     if event.message.text.lower() == "register":
         line_bot_api.reply_message(
             event.reply_token,
@@ -330,7 +330,9 @@ def handle_message(event):
         
         description="Yooo!"
         add_user(event.reply_token, description)
-
+    else:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
+    
     # if event.message.text.lower() == "eyny":
     #     content = eyny_movie()
     #     line_bot_api.reply_message(
