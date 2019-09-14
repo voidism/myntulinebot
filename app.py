@@ -15,15 +15,16 @@ from linebot.exceptions import (
 from linebot.models import *
 
 app = Flask(__name__)
-config = configparser.ConfigParser()
-config.read("config.ini")
 
-line_bot_api = LineBotApi(config['line_bot']['Channel_Access_Token'])
-handler = WebhookHandler(config['line_bot']['Channel_Secret'])
-client_id = config['imgur_api']['Client_ID']
-client_secret = config['imgur_api']['Client_Secret']
-album_id = config['imgur_api']['Album_ID']
-API_Get_Image = config['other_api']['API_Get_Image']
+Channel_Access_Token = "/MMlWzGBxIc4blHk4PPF7nrRdnalu04uN5KOb8cQdSzcumiia7faEM7F8yqj9z1G1xMnQpa03SSx4sZXXcz8x5Oy5yQ/ETLg5ur5ibVM+yqIwaVLTzxj5jiW33zybqMwz99ADpDRbTSNsUwjqA92JgdB04t89/1O/w1cDnyilFU="
+Channel_Secret = "cd343b1e6cb8bc55360c92b172cdb6aa"
+
+line_bot_api = LineBotApi(Channel_Access_Token)
+handler = WebhookHandler(Channel_Secret)
+# client_id = config['imgur_api']['Client_ID']
+# client_secret = config['imgur_api']['Client_Secret']
+# album_id = config['imgur_api']['Album_ID']
+# API_Get_Image = config['other_api']['API_Get_Image']
 
 
 @app.route("/callback", methods=['POST'])
